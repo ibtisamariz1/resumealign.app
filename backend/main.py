@@ -1,19 +1,10 @@
-# backend/main.py
-from fastapi import FastAPI
-
-app = FastAPI()
-
-@app.get("/ping")
-def ping():
-    return {"message": "pong"}
-
 from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Dict
 
 app = FastAPI()
 
-# Allow CORS (Streamlit frontend → FastAPI backend)
+# CORS middleware for frontend to call backend
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -21,6 +12,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# ✅ Ping route
+@app.get("/ping")
+def ping():
+    return {"message": "pong"}
+
+# ✅ Matching logic route
 @app.post("/match")
 async def match_files(
     resume: UploadFile = File(...),
